@@ -1,0 +1,53 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div id="app">
+    <table class="table" style="width:40%" align="center">
+        <thead class="thead-light">
+            <tr>
+                <th scope="col" width="50%">Name</th>
+                <th scope="col" width="10%">Price</th>
+                <th scope="col" width="5%"></th>
+            </tr>
+        </thead>
+        <tbody>
+
+            <tr v-for="stock in stocks">
+                <td style="color:#0055b1">{{stock.Name}}</td>
+                <td>{{stock.Price}}</td>
+                <td v-if="stock.Price<0">
+                    <span class="fas fa-caret-down" style="color:red" />
+                </td>
+                <td v-if="stock.Price>0">
+                    <span class="fas fa-caret-up" style="color:green" />
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+</div>
+
+<script>
+    (async function () {
+
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/app")
+            .build();
+
+        const app = new Vue({
+            el: '#app',
+            data: {
+                stocks: @Html.Raw(@Model.StocksData),
+                newStock: null
+            }
+        });
+        connection.on("update", stock => {
+            app.stocks.filter(x => x.Id == stock.id)[0].Price = stock.price;
+        });
+        await connection.start();
+    })();
+
+</script>
