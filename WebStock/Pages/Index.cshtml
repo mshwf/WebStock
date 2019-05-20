@@ -45,7 +45,7 @@
             }
         });
         connection.on("update", stock => {
-            app.stocks.filter(x => x.Id == stock.id)[0].Price = stock.price;
+            app.stocks.find(x => x.Id == stock.id).Price = stock.price;
         });
         await connection.start();
     })();
