@@ -35,7 +35,7 @@ namespace WebStock.Models
         public void UpdatePrice()
         {
             Random random = new Random();
-            int index = random.Next(0, Utils.Range.Length - 1);
+            int index = random.Next(0, Utils.Range.Length);
             Price += Utils.Range[index];
         }
     }
